@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#94A6B7</color>
+    <color name="lightBlueCenter">#94A6B7</color>
+    <color name="lightBlueStart">#6c8094</color>
+    <color name="lightBlueEnd">#ceddeb</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#D81B60</color>
     <color name="white">#FFFFFF</color>
-    <color name="background">#264057</color>
+    <color name="backgroundCenter">#264057</color>
+    <color name="backgroundStart">#132433</color>
+    <color name="backgroundEnd">#4e7291</color>
     <color name="black">#000000</color>
 </resources>
