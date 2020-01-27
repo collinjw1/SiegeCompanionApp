@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "627963691581",
+    "firebase_url": "https://siege-companion-app.firebaseio.com",
+    "project_id": "siege-companion-app",
+    "storage_bucket": "siege-companion-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627963691581:android:78614238d79563c0f1e054",
+        "android_client_info": {
+          "package_name": "edu.rosehulman.collinjw.siegecompanionapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "627963691581-khs38o9t1c6fdpvipfcnj3b74aqkgmhg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE5OjjPK2NisQCRdQgjxMP_bvyPYHGpFg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "627963691581-khs38o9t1c6fdpvipfcnj3b74aqkgmhg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

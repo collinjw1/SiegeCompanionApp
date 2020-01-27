@@ -1,5 +1,6 @@
 package edu.rosehulman.collinjw.siegecompanionapp
 
+import android.net.Uri
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -13,8 +14,11 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import edu.rosehulman.collinjw.siegecompanionapp.ui.home.HomeFragment
+import kotlinx.android.synthetic.main.fragment_home_page.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
+    HomeFragment.OnHomeListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -24,11 +28,6 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-//        val fab: FloatingActionButton = findViewById(R.id.fab)
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
@@ -42,6 +41,9 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -54,4 +56,25 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+    override fun onDirectorySelected(uri: Uri) {
+
+    }
+
+    override fun onButtonSelected(s: String) {
+        val dirFragment = DirectoryFragment()
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.nav_host_fragment, dirFragment)
+        ft.addToBackStack("detail")
+        ft.commit()
+    }
+
+//    fun runDirectory() {
+//        val dirFragment = DirectoryFragment()
+//        val ft = supportFragmentManager.beginTransaction()
+//        ft.replace(R.id.nav_host_fragment, dirFragment)
+//        ft.addToBackStack("detail")
+//        ft.commit()
+//
+//    }
 }

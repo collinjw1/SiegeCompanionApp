@@ -8,16 +8,21 @@
     android:layout_height="wrap_content"
     tools:context=".MainActivity"
     android:layout_margin="8dp"
-    android:paddingVertical="8dp"
-    android:paddingLeft="12dp"
-    android:layout_marginVertical="10dp"
-    android:layout_marginHorizontal="30dp">
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    app:cardBackgroundColor="@color/lightBlueCenter">
 
         <TextView
-            android:id="@+id/name_text_view"
+            android:id="@+id/directory_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Amaru"
-
-            android:textSize="24sp" />
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"/>
 </androidx.cardview.widget.CardView>
