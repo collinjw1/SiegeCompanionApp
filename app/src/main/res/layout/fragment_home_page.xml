@@ -41,9 +41,17 @@
         />
 
     <Button
-        android:id="@+id/submitatip_button"
-        android:text="Submit a tip"
+        android:id="@+id/highlightReel_button"
+        android:text="Highlight reel"
         android:layout_below="@+id/operators_button"
         style="@style/nav_button"
         />
+
+    <Button
+        android:id="@+id/submitatip_button"
+        android:text="Submit a tip"
+        android:layout_below="@+id/highlightReel_button"
+        style="@style/nav_button"
+        />
+
 </RelativeLayout>
