@@ -14,6 +14,7 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import androidx.fragment.app.Fragment
 import edu.rosehulman.collinjw.siegecompanionapp.ui.home.HomeFragment
 import kotlinx.android.synthetic.main.fragment_home_page.*
 
@@ -62,9 +63,14 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     }
 
     override fun onButtonSelected(s: String) {
-        val dirFragment = DirectoryFragment()
+        var switchTo: Fragment
+        if (s == Constants.SUBMIT) {
+            switchTo = SubmitTipPage()
+        } else {
+            switchTo = DirectoryFragment(s)
+        }
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.nav_host_fragment, dirFragment)
+        ft.replace(R.id.nav_host_fragment, switchTo)
         ft.addToBackStack("detail")
         ft.commit()
     }

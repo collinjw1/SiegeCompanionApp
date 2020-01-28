@@ -1,19 +1,38 @@
 package edu.rosehulman.collinjw.siegecompanionapp
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
 
-class DirectoryAdapter(var context: Context) : RecyclerView.Adapter<DirectoryViewHolder>() {
+class DirectoryAdapter(var context: Context, val path: String) : RecyclerView.Adapter<DirectoryViewHolder>() {
 
     val directories = ArrayList<String>()
+    val photoRef = FirebaseFirestore
+        .getInstance()
+        .collection(path)
 
     init {
-        directories.add("Ash")
-        directories.add("Sledge")
-        directories.add("Thatcher")
-        directories.add("Thermite")
+//        directories.add("Ash")
+//        directories.add("Sledge")
+//        directories.add("Thatcher")
+//        directories.add("Thermite")
+
+
+        photoRef.addSnapshotListener{ snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
+            if (exception != null) {
+                return@addSnapshotListener
+            }
+            for (docChange in snapshot!!.documentChanges) {
+                directories.add(directories.size, docChange.document.id)
+                notifyItemInserted(0)
+            }
+        }
+
     }
 
     override fun getItemCount() = directories.size

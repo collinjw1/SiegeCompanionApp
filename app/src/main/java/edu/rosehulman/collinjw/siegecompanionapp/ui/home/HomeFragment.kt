@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import edu.rosehulman.collinjw.siegecompanionapp.Constants
 import edu.rosehulman.collinjw.siegecompanionapp.DirectoryFragment
 import edu.rosehulman.collinjw.siegecompanionapp.MainActivity
 import edu.rosehulman.collinjw.siegecompanionapp.R
@@ -51,7 +52,13 @@ class HomeFragment : Fragment() {
 //            textView.text = it
 //        })
         rootView.operators_button.setOnClickListener {
-            listener?.onButtonSelected("operators")
+            listener?.onButtonSelected(Constants.OPERATORS_COLLECTION)
+        }
+        rootView.maps_button.setOnClickListener {
+            listener?.onButtonSelected(Constants.MAPS_COLLECTION)
+        }
+        rootView.submitatip_button.setOnClickListener {
+            listener?.onButtonSelected(Constants.SUBMIT)
         }
 
         return rootView

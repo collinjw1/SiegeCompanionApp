@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".SubmitTipPage"
+        android:background="@drawable/background_gradient"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <TextView
+            android:id="@+id/submit_tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="45dp"
+            android:textSize="24sp"
+            android:text="@string/submit_tip_header"
+            android:textColor="@color/white"
+            android:layout_marginBottom="8dp" />
+
+
+        <TextView
+            android:id="@+id/title_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="25dp"
+            android:textSize="20sp"
+            android:text="@string/header_title_string"
+            android:textColor="@color/white"
+            android:layout_marginBottom="4dp"
+            android:layout_below="@+id/submit_tip"/>
+
+        <EditText
+            android:id="@+id/title_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_header"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:hint="@string/enter_post_title_here"/>
+
+        <TextView
+            android:id="@+id/content_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="25dp"
+            android:textSize="20sp"
+            android:text="@string/content_header_string"
+            android:textColor="@color/white"
+            android:layout_marginBottom="4dp"
+            android:layout_below="@+id/title_edit_text"/>
+
+        <EditText
+            android:id="@+id/content_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="175dp"
+            android:layout_below="@id/content_header"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:gravity="top"
+            android:hint="@string/enter_post_content_here"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload file"
+            android:background="@color/lightBlueCenter"
+            android:textColor="@color/white"
+            android:layout_below="@id/content_edit_text"
+            android:layout_marginTop="33dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="33dp"
+            android:padding="10dp"
+            android:textSize="20dp"
+            android:textAllCaps="false"/>
+
+
+
+    </RelativeLayout>
+</ScrollView>
