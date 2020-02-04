@@ -14,7 +14,7 @@ class DirectoryViewHolder : RecyclerView.ViewHolder {
     constructor(itemView: View, adapter: DirectoryAdapter, context: Context): super(itemView) {
         this.context = context
         itemView.setOnClickListener {
-            //adapter.onPhotoSelected(adapterPosition)
+            adapter.listener?.onDirectorySelected(directoryTextView.text.toString())
         }
     }
 

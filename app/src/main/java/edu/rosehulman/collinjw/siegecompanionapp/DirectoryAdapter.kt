@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import edu.rosehulman.collinjw.siegecompanionapp.ui.home.HomeFragment
 
-class DirectoryAdapter(var context: Context, val path: String) : RecyclerView.Adapter<DirectoryViewHolder>() {
+class DirectoryAdapter(var context: Context, val path: String, val listener: DirectoryFragment.OnDirectoryListener) : RecyclerView.Adapter<DirectoryViewHolder>() {
 
     val directories = ArrayList<String>()
+    //var listener: DirectoryFragment.OnDirectoryListener? = null
     val directoryRef = FirebaseFirestore
         .getInstance()
         .collection(path)
@@ -31,6 +33,10 @@ class DirectoryAdapter(var context: Context, val path: String) : RecyclerView.Ad
 
     }
 
+//    fun giveListener(passedListener: DirectoryFragment.OnDirectoryListener?) {
+//        this.listener = passedListener
+//    }
+
     override fun getItemCount() = directories.size
 
     override fun onCreateViewHolder(parent: ViewGroup, index: Int): DirectoryViewHolder {
@@ -43,4 +49,13 @@ class DirectoryAdapter(var context: Context, val path: String) : RecyclerView.Ad
         viewHolder.bind(directories[index])
 
     }
+
+
+//    fun onDirectorySelected(position: Int) {
+//        val postFragment = PostListFragment(directories[position])
+//        val ft = supportFragmentManager.beginTransaction()
+//        ft.replace(R.id.nav_host_fragment, photoFragment)
+//        ft.addToBackStack("detail")
+//        ft.commit()
+//    }
 }

@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_home_page.*
 class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     HomeFragment.OnHomeListener {
 
+
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +59,20 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    override fun onDirectorySelected(uri: Uri) {
+//    override fun onDirectorySelected(searchTag: String) {
+//        val postFragment = PostListFragment(searchTag)
+//        val ft = supportFragmentManager.beginTransaction()
+//        ft.replace(R.id.nav_host_fragment, postFragment)
+//        ft.addToBackStack("detail2")
+//        ft.commit()
+//    }
 
+    override fun onDirectorySelected(searchTag: String) {
+        val postFragment = PostListFragment(searchTag)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.nav_host_fragment, postFragment)
+        ft.addToBackStack("detail2")
+        ft.commit()
     }
 
     override fun onButtonSelected(s: String) {
@@ -67,7 +80,7 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         if (s == Constants.SUBMIT) {
             switchTo = SubmitTipPage()
         } else if (s == "highlightReel") {
-            switchTo = PostListFragment("Kanal")
+            switchTo = PostListFragment("Ash")
         } else {
             switchTo = DirectoryFragment(s)
         }
@@ -76,6 +89,8 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         ft.addToBackStack("detail")
         ft.commit()
     }
+
+
 
 //    fun runDirectory() {
 //        val dirFragment = DirectoryFragment()

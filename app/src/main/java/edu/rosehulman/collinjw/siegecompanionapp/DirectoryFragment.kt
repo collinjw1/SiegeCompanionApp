@@ -28,6 +28,8 @@ class DirectoryFragment(val path: String) : Fragment() {
 //    private var param1: String? = null
 //    private var param2: String? = null
     private var listener: OnDirectoryListener? = null
+    lateinit var adapter: DirectoryAdapter
+    var savedContext: OnDirectoryListener? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,20 +46,23 @@ class DirectoryFragment(val path: String) : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val recyclerView = inflater.inflate(R.layout.fragment_directory, container, false) as RecyclerView
-    val adapter = DirectoryAdapter(context!!, path)
+    adapter = DirectoryAdapter(context!!, path, savedContext!!)
     recyclerView.adapter = adapter
     recyclerView.layoutManager = LinearLayoutManager(context)
     recyclerView.setHasFixedSize(true)
-    return recyclerView    }
+    return recyclerView
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onDirectorySelected(uri)
-    }
+//    fun onButtonPressed(uri: Uri) {
+////        listener?.onDirectorySelected(uri)
+////    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnDirectoryListener) {
+            //adapter.giveListener(context)
+            savedContext = context
             listener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
@@ -82,7 +87,7 @@ class DirectoryFragment(val path: String) : Fragment() {
      */
     interface OnDirectoryListener {
         // TODO: Update argument type and name
-        fun onDirectorySelected(uri: Uri)
+        fun onDirectorySelected(searchTag: String)
     }
 
 //    companion object {
