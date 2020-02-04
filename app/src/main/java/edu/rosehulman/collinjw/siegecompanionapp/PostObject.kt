@@ -11,22 +11,19 @@ import java.util.*
 
 @Parcelize
 class PostObject(
-    val title: String,
-    val textContent: String,
-    val mediaRef: String,
-    val tags: Array<String>
+    var title: String,
+    var textContent: String,
+    var mediaRef: String,
+    var tags: String
 
 ): Parcelable {
-    @get:Exclude
-    var id = ""
-    @ServerTimestamp
-    var lastTouched: Timestamp? = null
+    @get:Exclude var id = ""
+    @ServerTimestamp var lastTouched: Timestamp? = null
 
     companion object {
         const val LAST_TOUCHED_KEY = "lastTouched"
         fun fromSnapshot(snapshot: DocumentSnapshot): PostObject {
             val po = snapshot.toObject(PostObject::class.java)!!
-            po.id = snapshot.id
             return po
         }
     }

@@ -60,6 +60,9 @@ class HomeFragment : Fragment() {
         rootView.submitatip_button.setOnClickListener {
             listener?.onButtonSelected(Constants.SUBMIT)
         }
+        rootView.highlightReel_button.setOnClickListener {
+            listener?.onButtonSelected("highlightReel")
+        }
 
         return rootView
     }

@@ -63,9 +63,11 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     }
 
     override fun onButtonSelected(s: String) {
-        var switchTo: Fragment
+        val switchTo: Fragment
         if (s == Constants.SUBMIT) {
             switchTo = SubmitTipPage()
+        } else if (s == "highlightReel") {
+            switchTo = PostListFragment("Ash")
         } else {
             switchTo = DirectoryFragment(s)
         }

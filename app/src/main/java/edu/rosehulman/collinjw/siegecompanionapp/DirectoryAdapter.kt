@@ -12,18 +12,14 @@ import com.google.firebase.firestore.QuerySnapshot
 class DirectoryAdapter(var context: Context, val path: String) : RecyclerView.Adapter<DirectoryViewHolder>() {
 
     val directories = ArrayList<String>()
-    val photoRef = FirebaseFirestore
+    val directoryRef = FirebaseFirestore
         .getInstance()
         .collection(path)
 
     init {
-//        directories.add("Ash")
-//        directories.add("Sledge")
-//        directories.add("Thatcher")
-//        directories.add("Thermite")
 
 
-        photoRef.addSnapshotListener{ snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
+        directoryRef.addSnapshotListener{ snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
             if (exception != null) {
                 return@addSnapshotListener
             }

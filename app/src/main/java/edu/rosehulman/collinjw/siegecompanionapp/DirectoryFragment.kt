@@ -44,11 +44,11 @@ class DirectoryFragment(val path: String) : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val recyclerView = inflater.inflate(R.layout.fragment_directory, container, false) as RecyclerView
-        val adapter = DirectoryAdapter(context!!, path)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.setHasFixedSize(true)
-        return recyclerView    }
+    val adapter = DirectoryAdapter(context!!, path)
+    recyclerView.adapter = adapter
+    recyclerView.layoutManager = LinearLayoutManager(context)
+    recyclerView.setHasFixedSize(true)
+    return recyclerView    }
 
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
