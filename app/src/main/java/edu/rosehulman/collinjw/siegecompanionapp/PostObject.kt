@@ -11,10 +11,10 @@ import java.util.*
 
 @Parcelize
 class PostObject(
-    var title: String,
-    var textContent: String,
-    var mediaRef: String,
-    var tags: String
+    var title: String = "",
+    var textContent: String = "",
+    var mediaRef: String = "",
+    var tags: List<String> = listOf()
 
 ): Parcelable {
     @get:Exclude var id = ""

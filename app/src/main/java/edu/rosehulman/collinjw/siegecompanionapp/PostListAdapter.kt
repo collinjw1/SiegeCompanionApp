@@ -20,7 +20,7 @@ class PostListAdapter(var context: Context, val searchTag: String) : RecyclerVie
 
 
         postsRef
-//            .whereArrayContains("tags", searchTag)
+            .whereArrayContains("tags", searchTag)
             .addSnapshotListener{ snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
             if (exception != null) {
                 return@addSnapshotListener
@@ -28,7 +28,7 @@ class PostListAdapter(var context: Context, val searchTag: String) : RecyclerVie
             for (docChange in snapshot!!.documentChanges) {
                 val post = PostObject.fromSnapshot(docChange.document)
                 posts.add(posts.size, post)
-                notifyItemInserted(0)
+                notifyItemInserted(posts.size)
             }
         }
 
@@ -38,7 +38,7 @@ class PostListAdapter(var context: Context, val searchTag: String) : RecyclerVie
 
     override fun onCreateViewHolder(parent: ViewGroup, index: Int): PostListViewHolder {
         //Log.d(Constants.TAG, "Creating VH")
-        val view = LayoutInflater.from(context).inflate(R.layout.directory_row_view, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.post_row_view, parent, false)
         return PostListViewHolder(view, this, context)
     }
 

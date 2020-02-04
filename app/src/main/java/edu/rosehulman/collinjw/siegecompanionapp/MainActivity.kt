@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         if (s == Constants.SUBMIT) {
             switchTo = SubmitTipPage()
         } else if (s == "highlightReel") {
-            switchTo = PostListFragment("Ash")
+            switchTo = PostListFragment("Kanal")
         } else {
             switchTo = DirectoryFragment(s)
         }
