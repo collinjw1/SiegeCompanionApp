@@ -23,7 +23,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [PostListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class PostListFragment(val searchTag: String) : Fragment() {
+class PostListFragment(val searchTag: String = Constants.HIGHLIGHT_REEL) : Fragment() {
     // TODO: Rename and change types of parameters
 //    private var listener: OnFragmentInteractionListener? = null
 

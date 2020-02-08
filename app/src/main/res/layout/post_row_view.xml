@@ -33,11 +33,32 @@
             android:id="@+id/post_title_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="55dp"
+            android:maxHeight="50dp"
             android:layout_toRightOf="@id/more_button"
             android:layout_margin="8dp"
             android:textSize="20sp"
-            android:text="l;askdjf;laskfjlksfjlksdfjlkasdfjlkasdfjlkasfjdlkasdfjlkasdfjlkfsadjlkasfdjdlaskdfjlaskfjlksdf"
+            android:text=""
+            android:textColor="@color/white">
+        </TextView>
+
+        <ImageView
+            android:id="@+id/post_image"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/post_title_text_view"
+            android:visibility="gone"
+            android:src="@drawable/ic_settings_black_24dp"/>
+
+        <TextView
+            android:id="@+id/post_content_text_view"
+            android:layout_below="@+id/post_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:text="asidjfaskdjflkasdjf;lasjflasdfasdfasfasfsadfsafsafsafasfasdfasfdkasjd"
             android:textColor="@color/white">
         </TextView>
     </RelativeLayout>

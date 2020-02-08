@@ -21,9 +21,6 @@ class HomeFragment : Fragment() {
     private var listener: OnHomeListener? = null
     lateinit var rootView: View
 
-    init {
-//        listener =
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

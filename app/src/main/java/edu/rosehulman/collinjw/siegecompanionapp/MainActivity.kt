@@ -1,9 +1,6 @@
 package edu.rosehulman.collinjw.siegecompanionapp
 
-import android.net.Uri
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -15,11 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import androidx.fragment.app.Fragment
+import edu.rosehulman.collinjw.siegecompanionapp.ui.gallery.GalleryFragment
 import edu.rosehulman.collinjw.siegecompanionapp.ui.home.HomeFragment
-import kotlinx.android.synthetic.main.fragment_home_page.*
 
 class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
-    HomeFragment.OnHomeListener {
+    HomeFragment.OnHomeListener, GalleryFragment.OnSearchListener {
 
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -38,7 +35,7 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send
+                R.id.nav_tools
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -79,13 +76,21 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         val switchTo: Fragment
         if (s == Constants.SUBMIT) {
             switchTo = SubmitTipPage()
-        } else if (s == "highlightReel") {
-            switchTo = PostListFragment("Ash")
+        } else if (s == Constants.HIGHLIGHT_REEL) {
+            switchTo = PostListFragment(Constants.HIGHLIGHT_REEL)
         } else {
             switchTo = DirectoryFragment(s)
         }
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.nav_host_fragment, switchTo)
+        ft.addToBackStack("detail")
+        ft.commit()
+    }
+
+    override fun onSearch(searchTag: String) {
+        val postFragment = PostListFragment(searchTag)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.nav_host_fragment, postFragment)
         ft.addToBackStack("detail")
         ft.commit()
     }
