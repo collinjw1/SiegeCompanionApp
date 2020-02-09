@@ -58,7 +58,10 @@ class HomeFragment : Fragment() {
             listener?.onButtonSelected(Constants.SUBMIT)
         }
         rootView.highlightReel_button.setOnClickListener {
-            listener?.onButtonSelected("highlightReel")
+            listener?.onButtonSelected(Constants.HIGHLIGHT_REEL)
+        }
+        rootView.stat_button.setOnClickListener {
+            listener?.onButtonSelected(Constants.STATS)
         }
 
         return rootView

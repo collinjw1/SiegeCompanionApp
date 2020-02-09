@@ -22,4 +22,6 @@
     <string name="content_header_string">Content</string>
     <string name="enter_post_content_here">Enter post content here</string>
 
+    <string name="login">Login</string>
+
 </resources>

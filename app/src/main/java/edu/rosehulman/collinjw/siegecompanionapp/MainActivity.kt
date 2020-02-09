@@ -1,6 +1,8 @@
 package edu.rosehulman.collinjw.siegecompanionapp
 
 import android.os.Bundle
+import android.service.autofill.UserData
+import android.util.Log
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -11,15 +13,32 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
 import edu.rosehulman.collinjw.siegecompanionapp.ui.gallery.GalleryFragment
 import edu.rosehulman.collinjw.siegecompanionapp.ui.home.HomeFragment
+import com.firebase.ui.auth.AuthUI
+import com.google.common.io.Resources
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
+import edu.rosehulman.collinjw.siegecompanionapp.ui.tools.ToolsFragment
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
-    HomeFragment.OnHomeListener, GalleryFragment.OnSearchListener {
+    HomeFragment.OnHomeListener, GalleryFragment.OnSearchListener,
+    ToolsFragment.OnToolsListener, SplashFragment.OnLoginButtonPressedListener {
 
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    lateinit var authStateListener: FirebaseAuth.AuthStateListener
+    private val RC_SIGN_IN = 1
+    val auth = FirebaseAuth.getInstance()
+    val userDataRef = FirebaseFirestore
+        .getInstance()
+        .collection(Constants.USERDATA_COLLECTION)
+    var scUserData: UserDataObject? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +60,71 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        initializeListeners()
+        setUserData()
 
 
+
+
+
+
+    }
+
+    fun setUserData() {
+        userDataRef
+            .whereEqualTo("uid", auth.currentUser?.uid)
+            .addSnapshotListener { snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
+                if (exception != null) {
+                    return@addSnapshotListener
+                }
+                for (docChange in snapshot!!.documentChanges) {
+                    scUserData = UserDataObject.fromSnapshot(docChange.document)
+                    updateNavDrawer()
+
+                }
+            }
+    }
+
+    fun updateNavDrawer() {
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        var hv = navView.getHeaderView(0)
+        var navUsername = hv.findViewById<TextView>(R.id.navdrawer_account_username)
+        navUsername.text = auth.currentUser?.displayName
+        var siegeUsername = hv.findViewById<TextView>(R.id.navdrawer_siege_username)
+        siegeUsername.text = scUserData?.siegeUsername
+    }
+
+    private fun initializeListeners() {
+        // TODO: Create an AuthStateListener that passes the UID
+        // to the MovieQuoteFragment if the user is logged in
+        // and goes back to the Splash fragment otherwise.
+        // See https://firebase.google.com/docs/auth/users#the_user_lifecycle
+        authStateListener = FirebaseAuth.AuthStateListener { auth: FirebaseAuth ->
+            val user = auth.currentUser
+            if (user != null) {
+                setUserData()
+                if (scUserData == null) {
+                    scUserData = UserDataObject(auth.currentUser!!.uid, "")
+                    userDataRef.document(auth.currentUser!!.uid).set(UserDataObject(auth.currentUser!!.uid, ""))
+                }
+                //updateNavDrawer()
+                switchToHomeFragment(user.uid)
+            } else {
+                switchToSplashFragment()
+            }
+        }
+    }
+
+    private fun switchToSplashFragment() {
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.nav_host_fragment, SplashFragment())
+        ft.commit()
+    }
+
+    private fun switchToHomeFragment(uid: String) {
+        val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.nav_host_fragment, HomeFragment())
+        ft.commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -78,6 +160,8 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
             switchTo = SubmitTipPage()
         } else if (s == Constants.HIGHLIGHT_REEL) {
             switchTo = PostListFragment(Constants.HIGHLIGHT_REEL)
+        } else if (s == Constants.STATS){
+            switchTo = UserStatPage()
         } else {
             switchTo = DirectoryFragment(s)
         }
@@ -93,6 +177,49 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         ft.replace(R.id.nav_host_fragment, postFragment)
         ft.addToBackStack("detail")
         ft.commit()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        auth.addAuthStateListener(authStateListener)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        auth.removeAuthStateListener(authStateListener)
+    }
+
+    override fun onLoginButtonPressed() {
+        launchLoginUI()
+
+    }
+
+    override fun onSettingsSelected(s: String) {
+        if (s == "Logout") {
+            auth.signOut()
+        }
+    }
+
+    private fun launchLoginUI() {
+        // For details, see https://firebase.google.com/docs/auth/android/firebaseui#sign_in
+        // Choose authentication providers
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.PhoneBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build())
+
+        val loginIntent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .build()
+// Create and launch sign-in intent
+        startActivityForResult(loginIntent, RC_SIGN_IN)
+
+
+
+        //updateNavDrawer()
+
+
     }
 
 

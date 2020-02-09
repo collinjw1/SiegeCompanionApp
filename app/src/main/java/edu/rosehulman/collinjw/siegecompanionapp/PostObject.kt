@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
-class PostObject(
+data class PostObject(
     var title: String = "",
     var textContent: String = "",
     var mediaRef: String = "",
