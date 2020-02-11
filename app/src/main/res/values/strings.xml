@@ -23,5 +23,6 @@
     <string name="enter_post_content_here">Enter post content here</string>
 
     <string name="login">Login</string>
+    <string name="user_not_found">Siege username not found. Please update username in settings.</string>
 
 </resources>

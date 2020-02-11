@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         } else if (s == Constants.HIGHLIGHT_REEL) {
             switchTo = PostListFragment(Constants.HIGHLIGHT_REEL)
         } else if (s == Constants.STATS){
-            switchTo = UserStatPage()
+            switchTo = UserStatPage(scUserData?.siegeUsername)
         } else {
             switchTo = DirectoryFragment(s)
         }

@@ -6,11 +6,88 @@
     android:layout_height="match_parent"
     tools:context=".UserStatPage">
 
-
-    <TextView
-        android:id="@+id/stat_page_header"
+    <RelativeLayout
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/user_not_found_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_not_found"
+            android:textAlignment="center"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/player_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:text="Dum_Donny's Stats"/>
+
+        <ImageView
+            android:id="@+id/player_rank_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/player_name_tv"
+            android:src="@drawable/champ_img"/>
+
+        <TextView
+            android:id="@+id/player_level_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Level | 384"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:textSize="30sp"
+            android:layout_below="@+id/player_rank_iv"/>
+
+        <TextView
+            android:id="@+id/player_rank_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rank | Champion"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:textSize="30sp"
+            android:layout_below="@+id/player_level_tv"/>
+
+        <TextView
+            android:id="@+id/player_mmr_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ranked MMR | 3979"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:textSize="30sp"
+            android:layout_below="@+id/player_rank_tv"/>
+
+        <TextView
+            android:id="@+id/player_kd_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ranked K/D | 1.28"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:textSize="30sp"
+            android:layout_below="@+id/player_mmr_tv"/>
+
+
+
+    </RelativeLayout>
 
 </FrameLayout>
