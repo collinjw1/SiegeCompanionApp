@@ -30,8 +30,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:text="Dum_Donny's Stats"/>
+            android:textStyle="bold"/>
 
         <ImageView
             android:id="@+id/player_rank_iv"
@@ -39,14 +38,12 @@
             android:layout_height="200dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:layout_below="@+id/player_name_tv"
-            android:src="@drawable/champ_img"/>
+            android:layout_below="@+id/player_name_tv"/>
 
         <TextView
             android:id="@+id/player_level_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Level | 384"
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
@@ -57,7 +54,6 @@
             android:id="@+id/player_rank_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rank | Champion"
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
@@ -68,7 +64,6 @@
             android:id="@+id/player_mmr_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ranked MMR | 3979"
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
@@ -79,7 +74,6 @@
             android:id="@+id/player_kd_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ranked K/D | 1.28"
             android:textColor="@color/white"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"

@@ -25,4 +25,10 @@
     <string name="login">Login</string>
     <string name="user_not_found">Siege username not found. Please update username in settings.</string>
 
+    <string name="player_stats_rank">Rank | %s</string>
+    <string name="player_stats_name">%s\'s Stats</string>
+    <string name="player_stats_level">Level | %s</string>
+    <string name="player_stats_mmr">Ranked MMR | %s</string>
+    <string name="player_stats_kd">Ranked KD | %s</string>
+
 </resources>

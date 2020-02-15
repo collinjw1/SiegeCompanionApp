@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     val userDataRef = FirebaseFirestore
         .getInstance()
         .collection(Constants.USERDATA_COLLECTION)
-    var scUserData: UserDataObject? = null
+    lateinit var scUserData: UserDataObject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +60,8 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+
         initializeListeners()
-        setUserData()
 
 
 
@@ -71,18 +71,15 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     }
 
     fun setUserData() {
-        userDataRef
-            .whereEqualTo("uid", auth.currentUser?.uid)
-            .addSnapshotListener { snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
-                if (exception != null) {
-                    return@addSnapshotListener
-                }
-                for (docChange in snapshot!!.documentChanges) {
-                    scUserData = UserDataObject.fromSnapshot(docChange.document)
-                    updateNavDrawer()
 
-                }
+        userDataRef.document(auth.currentUser!!.uid).get().addOnSuccessListener {
+            scUserData = UserDataObject.fromSnapshot(it)
+            if (scUserData == null) {
+                scUserData = UserDataObject(auth.currentUser!!.uid, "")
+                userDataRef.document(auth.currentUser!!.uid).set(UserDataObject(auth.currentUser!!.uid, ""))
             }
+            updateNavDrawer()
+        }
     }
 
     fun updateNavDrawer() {
@@ -103,16 +100,12 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
             val user = auth.currentUser
             if (user != null) {
                 setUserData()
-                if (scUserData == null) {
-                    scUserData = UserDataObject(auth.currentUser!!.uid, "")
-                    userDataRef.document(auth.currentUser!!.uid).set(UserDataObject(auth.currentUser!!.uid, ""))
-                }
-                //updateNavDrawer()
                 switchToHomeFragment(user.uid)
             } else {
                 switchToSplashFragment()
             }
         }
+
     }
 
     private fun switchToSplashFragment() {
