@@ -31,4 +31,6 @@
     <string name="player_stats_mmr">Ranked MMR | %s</string>
     <string name="player_stats_kd">Ranked KD | %s</string>
 
+    <string name="settings_username">Siege Username: %s</string>
+
 </resources>

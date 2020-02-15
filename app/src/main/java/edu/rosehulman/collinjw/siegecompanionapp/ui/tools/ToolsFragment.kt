@@ -9,26 +9,32 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.firebase.ui.auth.data.model.User
+import com.google.firebase.firestore.FirebaseFirestore
+import edu.rosehulman.collinjw.siegecompanionapp.Constants
+import edu.rosehulman.collinjw.siegecompanionapp.MainActivity
 import edu.rosehulman.collinjw.siegecompanionapp.R
+import edu.rosehulman.collinjw.siegecompanionapp.UserDataObject
 import kotlinx.android.synthetic.main.fragment_tools.view.*
 
 class ToolsFragment : Fragment() {
 
-    private lateinit var toolsViewModel: ToolsViewModel
+    lateinit var ud: UserDataObject
+    lateinit var root: View
     private var listener: OnToolsListener? = null
+    val userDataRef = FirebaseFirestore
+        .getInstance()
+        .collection(Constants.USERDATA_COLLECTION)
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        toolsViewModel =
-            ViewModelProviders.of(this).get(ToolsViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_tools, container, false)
+        root = inflater.inflate(R.layout.fragment_tools, container, false)
         val textView: TextView = root.findViewById(R.id.text_tools)
-        toolsViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
+        updatePage()
         root.logout_button.setOnClickListener {
             listener?.onSettingsSelected("Logout")
         }
@@ -39,6 +45,7 @@ class ToolsFragment : Fragment() {
         super.onAttach(context)
         if (context is OnToolsListener) {
             listener = context
+            ud = listener!!.getUD()
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
@@ -49,8 +56,14 @@ class ToolsFragment : Fragment() {
         listener = null
     }
 
+    fun updatePage() {
+        root.siege_username.text = getString(R.string.settings_username, ud.siegeUsername)
+
+    }
+
     interface OnToolsListener {
         // TODO: Update argument type and name
         fun onSettingsSelected(s: String)
+        fun getUD(): UserDataObject
     }
 }

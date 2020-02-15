@@ -193,6 +193,10 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         }
     }
 
+    override fun getUD(): UserDataObject {
+        return scUserData
+    }
+
     private fun launchLoginUI() {
         // For details, see https://firebase.google.com/docs/auth/android/firebaseui#sign_in
         // Choose authentication providers
