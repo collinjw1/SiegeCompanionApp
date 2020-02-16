@@ -23,6 +23,7 @@
     <string name="enter_post_content_here">Enter post content here</string>
 
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="user_not_found">Siege username not found. Please update username in settings.</string>
 
     <string name="player_stats_rank">Rank | %s</string>
@@ -32,5 +33,7 @@
     <string name="player_stats_kd">Ranked KD | %s</string>
 
     <string name="settings_username">Siege Username: %s</string>
+    <string name="change_siege_username">Change Siege username</string>
+    <string name="stats">Stats</string>
 
 </resources>

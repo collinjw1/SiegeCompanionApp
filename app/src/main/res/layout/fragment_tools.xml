@@ -16,30 +16,34 @@
         android:textColor="@color/white"
         android:layout_marginBottom="8dp" />
 
-    <TextView
-        android:id="@+id/siege_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="5dp"
-        android:textSize="20sp"
-        android:text= ""
-        android:textColor="@color/white"
-        android:layout_marginBottom="8dp"
-        android:layout_below="@+id/text_tools"/>
+
 
     <Button
         android:id="@+id/change_username_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Change username"
-        android:layout_below="@+id/siege_username"/>
+        style="@style/nav_button"
+        android:text="@string/change_siege_username"
+        android:layout_below="@+id/text_tools"/>
 
     <Button
         android:id="@+id/logout_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Logout"
+        style="@style/nav_button"
+        android:text="@string/logout"
         android:layout_below="@+id/change_username_button"/>
 
 </RelativeLayout>
+
+<!--<TextView-->
+<!--android:id="@+id/siege_username"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_marginStart="30dp"-->
+<!--android:layout_marginTop="5dp"-->
+<!--android:textSize="20sp"-->
+<!--android:text= ""-->
+<!--android:textColor="@color/white"-->
+<!--android:layout_marginBottom="8dp"-->
+<!--android:layout_below="@+id/text_tools"/>-->
