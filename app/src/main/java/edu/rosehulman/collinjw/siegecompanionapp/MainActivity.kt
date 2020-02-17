@@ -1,6 +1,13 @@
 package edu.rosehulman.collinjw.siegecompanionapp
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.service.autofill.UserData
 import android.util.Log
 import androidx.navigation.findNavController
@@ -14,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.widget.TextView
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import edu.rosehulman.collinjw.siegecompanionapp.ui.gallery.GalleryFragment
@@ -25,10 +33,16 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 import edu.rosehulman.collinjw.siegecompanionapp.ui.tools.ToolsFragment
 import kotlinx.android.synthetic.main.nav_header_main.*
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+
+private const val REQUEST_TAKE_PHOTO = 1
 
 class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     HomeFragment.OnHomeListener, GalleryFragment.OnSearchListener,
-    ToolsFragment.OnToolsListener, SplashFragment.OnLoginButtonPressedListener {
+    ToolsFragment.OnToolsListener, SplashFragment.OnLoginButtonPressedListener, SubmitTipPage.SubmitFragmentInteractionListener {
 
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -39,6 +53,7 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         .getInstance()
         .collection(Constants.USERDATA_COLLECTION)
     lateinit var scUserData: UserDataObject
+    private lateinit var currentPhotoPath: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -219,6 +234,67 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
 
     }
 
+    override fun onPictureButtonPressed() {
+        dispatchTakePictureIntent()
+    }
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    // Error occurred while creating the File
+                    null
+                }
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        this,
+                        "edu.rosehulman.collinjw.siegecompanionapp",
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+                    Log.d(Constants.SUBMIT, "pic intent launched")
+                }
+            }
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
+    private fun galleryAddPic() {
+
+    }
+
+   fun notifyMediaStoreScanner(file: File) {
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d(Constants.SUBMIT, "activity returned")
+
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            galleryAddPic()
+        }
+    }
 
 
 //    fun runDirectory() {
