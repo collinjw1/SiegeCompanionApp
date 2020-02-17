@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -19,12 +20,8 @@ import kotlinx.android.synthetic.main.fragment_tools.view.*
 
 class ToolsFragment : Fragment() {
 
-    lateinit var ud: UserDataObject
     lateinit var root: View
     private var listener: OnToolsListener? = null
-    val userDataRef = FirebaseFirestore
-        .getInstance()
-        .collection(Constants.USERDATA_COLLECTION)
 
 
     override fun onCreateView(
@@ -33,10 +30,11 @@ class ToolsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         root = inflater.inflate(R.layout.fragment_tools, container, false)
-        val textView: TextView = root.findViewById(R.id.text_tools)
-        updatePage()
         root.logout_button.setOnClickListener {
             listener?.onSettingsSelected("Logout")
+        }
+        root.change_username_button.setOnClickListener {
+            listener?.showChangeUsernameDialog()
         }
         return root
     }
@@ -45,7 +43,6 @@ class ToolsFragment : Fragment() {
         super.onAttach(context)
         if (context is OnToolsListener) {
             listener = context
-            ud = listener!!.getUD()
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
@@ -56,14 +53,9 @@ class ToolsFragment : Fragment() {
         listener = null
     }
 
-    fun updatePage() {
-        root.siege_username.text = getString(R.string.settings_username, ud.siegeUsername)
-
-    }
-
     interface OnToolsListener {
         // TODO: Update argument type and name
         fun onSettingsSelected(s: String)
-        fun getUD(): UserDataObject
+        fun showChangeUsernameDialog()
     }
 }

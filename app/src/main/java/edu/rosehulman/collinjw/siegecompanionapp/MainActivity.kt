@@ -10,6 +10,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.service.autofill.UserData
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -20,8 +21,11 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.FileProvider
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import edu.rosehulman.collinjw.siegecompanionapp.ui.gallery.GalleryFragment
@@ -32,6 +36,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 import edu.rosehulman.collinjw.siegecompanionapp.ui.tools.ToolsFragment
+import kotlinx.android.synthetic.main.change_username_dialog.view.*
+import kotlinx.android.synthetic.main.fragment_home_page.view.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import java.io.File
 import java.io.IOException
@@ -107,7 +113,6 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     }
 
     private fun initializeListeners() {
-        // TODO: Create an AuthStateListener that passes the UID
         // to the MovieQuoteFragment if the user is logged in
         // and goes back to the Splash fragment otherwise.
         // See https://firebase.google.com/docs/auth/users#the_user_lifecycle
@@ -208,8 +213,25 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         }
     }
 
-    override fun getUD(): UserDataObject {
-        return scUserData
+//    override fun getUD(): UserDataObject {
+//        return scUserData
+//    }
+
+    override fun showChangeUsernameDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(R.string.change_siege_username)
+        val view = LayoutInflater.from(this).inflate(R.layout.change_username_dialog, null,false)
+        view.siege_username_edit_text.setText(scUserData.siegeUsername)
+        builder.setView(view)
+        builder.setPositiveButton(android.R.string.ok) { _, _ ->
+
+            val newUsername = view.siege_username_edit_text.text.toString()
+            scUserData.siegeUsername = newUsername
+            userDataRef.document(auth.currentUser!!.uid).set(scUserData)
+            updateNavDrawer()
+        }
+        builder.setNegativeButton(android.R.string.cancel, null)
+        builder.create().show()
     }
 
     private fun launchLoginUI() {
