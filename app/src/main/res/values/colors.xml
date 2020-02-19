@@ -10,4 +10,5 @@
     <color name="backgroundStart">#132433</color>
     <color name="backgroundEnd">#4e7291</color>
     <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
 </resources>
