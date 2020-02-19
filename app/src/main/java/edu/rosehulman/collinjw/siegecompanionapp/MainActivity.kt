@@ -40,8 +40,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
 
-private const val REQUEST_TAKE_PHOTO = 1
-private const val RC_CHOOSE_PICTURE = 2
+private const val REQUEST_TAKE_PHOTO = 2
+private const val RC_CHOOSE_PICTURE = 3
 
 class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     HomeFragment.OnHomeListener, GalleryFragment.OnSearchListener,
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     val postsRef = FirebaseFirestore
         .getInstance()
         .collection(Constants.POSTS_COLLECTION)
-    lateinit var scUserData: UserDataObject
+    var scUserData: UserDataObject? = null
     private lateinit var currentPhotoPath: String
     private lateinit var currentPostObject: PostObject
 
@@ -97,7 +97,10 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     fun setUserData() {
 
         userDataRef.document(auth.currentUser!!.uid).get().addOnSuccessListener {
-            scUserData = UserDataObject.fromSnapshot(it)
+            Log.d("fuck", it.toString())
+            if (it["doc"] != null) {
+                scUserData = UserDataObject.fromSnapshot(it)
+            }
             if (scUserData == null) {
                 scUserData = UserDataObject(auth.currentUser!!.uid, "")
                 userDataRef.document(auth.currentUser!!.uid).set(UserDataObject(auth.currentUser!!.uid, ""))
@@ -211,13 +214,13 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         val builder = AlertDialog.Builder(this)
         builder.setTitle(R.string.change_siege_username)
         val view = LayoutInflater.from(this).inflate(R.layout.change_username_dialog, null,false)
-        view.siege_username_edit_text.setText(scUserData.siegeUsername)
+        view.siege_username_edit_text.setText(scUserData!!.siegeUsername)
         builder.setView(view)
         builder.setPositiveButton(android.R.string.ok) { _, _ ->
 
             val newUsername = view.siege_username_edit_text.text.toString()
-            scUserData.siegeUsername = newUsername
-            userDataRef.document(auth.currentUser!!.uid).set(scUserData)
+            scUserData!!.siegeUsername = newUsername
+            userDataRef.document(auth.currentUser!!.uid).set(scUserData!!)
             updateNavDrawer()
         }
         builder.setNegativeButton(android.R.string.cancel, null)
@@ -317,15 +320,14 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 REQUEST_TAKE_PHOTO -> {
-                    //sendCameraPhotoToAdapter()
                     ImageRescaleTask(currentPhotoPath, this).execute()
                 }
                 RC_CHOOSE_PICTURE -> {
-                    //sendGalleryPhotoToAdapter(data)
                     if (data != null && data.data != null) {
                         val location = data.data!!.toString()
                         ImageRescaleTask(location, this).execute()
                     }
+
                 }
             }
         }
