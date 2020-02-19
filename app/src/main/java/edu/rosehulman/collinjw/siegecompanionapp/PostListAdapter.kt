@@ -20,7 +20,7 @@ class PostListAdapter(var context: Context, val searchTag: String) : RecyclerVie
 
 
         postsRef
-            .whereArrayContains("tags", searchTag)
+            .whereArrayContainsAny("tags", listOf(searchTag, searchTag.toLowerCase(), searchTag.toUpperCase(), searchTag.capitalize()))
             .addSnapshotListener{ snapshot: QuerySnapshot?, exception: FirebaseFirestoreException? ->
             if (exception != null) {
                 return@addSnapshotListener
