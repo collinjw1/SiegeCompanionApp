@@ -8,8 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_splash.view.*
 
-// Typical fragment that calls a MainActivity function
-// when a button is pressed.
+
 class SplashFragment : Fragment() {
     var listener: OnLoginButtonPressedListener? = null
 

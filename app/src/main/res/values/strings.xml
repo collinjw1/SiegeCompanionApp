@@ -35,5 +35,9 @@
     <string name="settings_username">Siege Username: %s</string>
     <string name="change_siege_username">Change Siege username</string>
     <string name="stats">Stats</string>
+    <string name="tag_header_string">Tags</string>
+    <string name="tag_hint_string">ex: Ash, Sledge, etc.</string>
+    <string name="upload_file">Upload file</string>
+    <string name="highlight_reel">Highlight Reel</string>
 
 </resources>

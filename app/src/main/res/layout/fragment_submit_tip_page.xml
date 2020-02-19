@@ -77,19 +77,69 @@
             android:gravity="top"
             android:hint="@string/enter_post_content_here"/>
 
+        <TextView
+            android:id="@+id/highlightReal_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="25dp"
+            android:textSize="20sp"
+            android:text="@string/highlight_reel"
+            android:textColor="@color/white"
+            android:layout_marginBottom="4dp"
+            android:layout_below="@+id/content_edit_text"/>
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/highlightCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/highlightReal_header"
+            android:layout_alignBottom="@+id/highlightReal_header"
+            android:layout_marginEnd="-50dp"
+            android:buttonTint="@color/white"
+            android:layout_alignTop="@id/highlightReal_header"/>
+
+
+        <TextView
+            android:id="@+id/tag_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="25dp"
+            android:textSize="20sp"
+            android:text="@string/tag_header_string"
+            android:textColor="@color/white"
+            android:layout_marginBottom="4dp"
+            android:layout_below="@+id/highlightReal_header"/>
+
+        <EditText
+            android:id="@+id/tag_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tag_header"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:gravity="top"
+            android:hint="@string/tag_hint_string"/>
+
+
         <Button
             android:id="@+id/upload_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload file"
+            android:text="@string/upload_file"
             android:background="@color/lightBlueCenter"
             android:textColor="@color/white"
-            android:layout_below="@id/content_edit_text"
+            android:layout_below="@id/tag_edit_text"
             android:layout_marginTop="33dp"
             android:layout_marginStart="30dp"
             android:layout_marginBottom="33dp"
             android:padding="10dp"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textAllCaps="false"/>
 
 

@@ -13,7 +13,6 @@ import edu.rosehulman.collinjw.siegecompanionapp.ui.home.HomeFragment
 class DirectoryAdapter(var context: Context, val path: String, val listener: DirectoryFragment.OnDirectoryListener) : RecyclerView.Adapter<DirectoryViewHolder>() {
 
     val directories = ArrayList<String>()
-    //var listener: DirectoryFragment.OnDirectoryListener? = null
     val directoryRef = FirebaseFirestore
         .getInstance()
         .collection(path)
@@ -33,14 +32,9 @@ class DirectoryAdapter(var context: Context, val path: String, val listener: Dir
 
     }
 
-//    fun giveListener(passedListener: DirectoryFragment.OnDirectoryListener?) {
-//        this.listener = passedListener
-//    }
-
     override fun getItemCount() = directories.size
 
     override fun onCreateViewHolder(parent: ViewGroup, index: Int): DirectoryViewHolder {
-        //Log.d(Constants.TAG, "Creating VH")
         val view = LayoutInflater.from(context).inflate(R.layout.directory_row_view, parent, false)
         return DirectoryViewHolder(view, this, context)
     }
@@ -51,11 +45,4 @@ class DirectoryAdapter(var context: Context, val path: String, val listener: Dir
     }
 
 
-//    fun onDirectorySelected(position: Int) {
-//        val postFragment = PostListFragment(directories[position])
-//        val ft = supportFragmentManager.beginTransaction()
-//        ft.replace(R.id.nav_host_fragment, photoFragment)
-//        ft.addToBackStack("detail")
-//        ft.commit()
-//    }
 }

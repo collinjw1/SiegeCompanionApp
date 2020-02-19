@@ -16,7 +16,6 @@ class PostListViewHolder : RecyclerView.ViewHolder {
     val postContentTextView: TextView = itemView.post_content_text_view
     var visible: Boolean = false
     var context: Context
-    var bitmap: Bitmap? = null
     var firstRunCheck = true
     lateinit var rootView: View
 
@@ -24,7 +23,6 @@ class PostListViewHolder : RecyclerView.ViewHolder {
         this.context = context
         rootView = itemView
         itemView.setOnClickListener {
-            //adapter.onPhotoSelected(adapterPosition)
             if (!visible) {
                 itemView.post_image.visibility = ImageView.VISIBLE
                 itemView.post_content_text_view.visibility = ImageView.VISIBLE
@@ -47,15 +45,9 @@ class PostListViewHolder : RecyclerView.ViewHolder {
                 .into(rootView.post_image)
             firstRunCheck = false
         }
-        //if statement testing for image vs video, set postContent variable
         postTitleTextView.text = post.title
         postContentTextView.text = post.textContent
 
-    }
-
-    fun onImageLoaded(inComImage: Bitmap?) {
-        bitmap = inComImage
-        rootView.post_image.setImageBitmap(bitmap)
     }
 
 

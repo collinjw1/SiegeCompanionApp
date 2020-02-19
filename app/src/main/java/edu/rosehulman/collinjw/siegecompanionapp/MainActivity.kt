@@ -1,7 +1,11 @@
 package edu.rosehulman.collinjw.siegecompanionapp
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -24,16 +28,20 @@ import com.firebase.ui.auth.AuthUI
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import edu.rosehulman.collinjw.siegecompanionapp.ui.gallery.GalleryFragment
 import edu.rosehulman.collinjw.siegecompanionapp.ui.home.HomeFragment
 import edu.rosehulman.collinjw.siegecompanionapp.ui.tools.ToolsFragment
 import kotlinx.android.synthetic.main.change_username_dialog.view.*
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.random.Random
 
 private const val REQUEST_TAKE_PHOTO = 1
+private const val RC_CHOOSE_PICTURE = 2
 
 class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     HomeFragment.OnHomeListener, GalleryFragment.OnSearchListener,
@@ -47,8 +55,16 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     val userDataRef = FirebaseFirestore
         .getInstance()
         .collection(Constants.USERDATA_COLLECTION)
+    private val storageRef = FirebaseStorage
+        .getInstance()
+        .reference
+        .child("media")
+    val postsRef = FirebaseFirestore
+        .getInstance()
+        .collection(Constants.POSTS_COLLECTION)
     lateinit var scUserData: UserDataObject
     private lateinit var currentPhotoPath: String
+    private lateinit var currentPostObject: PostObject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +75,6 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
@@ -102,9 +116,6 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
     }
 
     private fun initializeListeners() {
-        // to the MovieQuoteFragment if the user is logged in
-        // and goes back to the Splash fragment otherwise.
-        // See https://firebase.google.com/docs/auth/users#the_user_lifecycle
         authStateListener = FirebaseAuth.AuthStateListener { auth: FirebaseAuth ->
             val user = auth.currentUser
             if (user != null) {
@@ -140,13 +151,6 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-//    override fun onDirectorySelected(searchTag: String) {
-//        val postFragment = PostListFragment(searchTag)
-//        val ft = supportFragmentManager.beginTransaction()
-//        ft.replace(R.id.nav_host_fragment, postFragment)
-//        ft.addToBackStack("detail2")
-//        ft.commit()
-//    }
 
     override fun onDirectorySelected(searchTag: String) {
         val postFragment = PostListFragment(searchTag)
@@ -202,9 +206,6 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         }
     }
 
-//    override fun getUD(): UserDataObject {
-//        return scUserData
-//    }
 
     override fun showChangeUsernameDialog() {
         val builder = AlertDialog.Builder(this)
@@ -235,21 +236,30 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .build()
-// Create and launch sign-in intent
         startActivityForResult(loginIntent, RC_SIGN_IN)
-
-
-
-        //updateNavDrawer()
-
 
     }
 
-    override fun onPictureButtonPressed() {
-        dispatchTakePictureIntent()
+    override fun onPictureButtonPressed(po: PostObject) {
+//        dispatchTakePictureIntent()
+        currentPostObject = po
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Choose a photo source")
+        builder.setMessage("Would you like to take a new picture?\nOr choose an existing one?")
+        builder.setPositiveButton("Take Picture") { _, _ ->
+            Log.d(Constants.SUBMIT, "take picture chosen")
+            dispatchTakePictureIntent()
+        }
+
+        builder.setNegativeButton("Choose Picture") { _, _ ->
+            dispatchChoosePictureIntent()
+        }
+        builder.create().show()
     }
 
     private fun dispatchTakePictureIntent() {
+
+        Log.d(Constants.SUBMIT, "take picture dispatch")
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             // Ensure that there's a camera activity to handle the intent
             takePictureIntent.resolveActivity(packageManager)?.also {
@@ -275,6 +285,18 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         }
     }
 
+    private fun dispatchChoosePictureIntent() {
+        val choosePictureIntent = Intent(
+            Intent.ACTION_OPEN_DOCUMENT,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
+        choosePictureIntent.addCategory(Intent.CATEGORY_OPENABLE)
+        choosePictureIntent.type = "image/*"
+        if (choosePictureIntent.resolveActivity(this.packageManager) != null) {
+            startActivityForResult(choosePictureIntent, RC_CHOOSE_PICTURE)
+        }
+    }
+
     @Throws(IOException::class)
     private fun createImageFile(): File {
         // Create an image file name
@@ -290,30 +312,64 @@ class MainActivity : AppCompatActivity(), DirectoryFragment.OnDirectoryListener,
         }
     }
 
-    private fun galleryAddPic() {
-
-    }
-
-   fun notifyMediaStoreScanner(file: File) {
-
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d(Constants.SUBMIT, "activity returned")
-
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            galleryAddPic()
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_TAKE_PHOTO -> {
+                    //sendCameraPhotoToAdapter()
+                    ImageRescaleTask(currentPhotoPath, this).execute()
+                }
+                RC_CHOOSE_PICTURE -> {
+                    //sendGalleryPhotoToAdapter(data)
+                    if (data != null && data.data != null) {
+                        val location = data.data!!.toString()
+                        ImageRescaleTask(location, this).execute()
+                    }
+                }
+            }
         }
     }
 
+    inner class ImageRescaleTask(val localPath: String, val context : Context) : AsyncTask<Void, Void, Bitmap>() {
+        override fun doInBackground(vararg p0: Void?): Bitmap? {
+            // Reduces length and width by a factor (currently 2).
+            val ratio = 2
+            return BitmapUtils.rotateAndScaleByRatio(context, localPath, ratio)
+        }
 
-//    fun runDirectory() {
-//        val dirFragment = DirectoryFragment()
-//        val ft = supportFragmentManager.beginTransaction()
-//        ft.replace(R.id.nav_host_fragment, dirFragment)
-//        ft.addToBackStack("detail")
-//        ft.commit()
-//
-//    }
+        override fun onPostExecute(bitmap: Bitmap?) {
+            storageAdd(localPath, bitmap)
+        }
+    }
+
+    private fun storageAdd(localPath: String, bitmap: Bitmap?) {
+        val baos = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        val id = Math.abs(Random.nextLong()).toString()
+        var uploadTask = storageRef.child(id).putBytes(data)
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+        }.addOnSuccessListener {
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            // ...
+        }
+        val urlTask = uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            storageRef.child(id).downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+                currentPostObject.mediaRef = downloadUri.toString()
+                postsRef.add(currentPostObject)
+
+            }
+        }
+    }
+
 }

@@ -38,6 +38,9 @@ class UserStatPage(private val username: String? = "") : Fragment(), GetStatsTas
         if (username == "") {
             rootView.user_not_found_tv.visibility = View.VISIBLE
         }
+        rootView.setOnClickListener {
+            //do nothing
+        }
         return rootView
     }
 
